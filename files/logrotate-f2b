@@ -1,0 +1,11 @@
+#
+# Ansible managed
+#
+/var/log/fail2ban.log {
+    compress
+    missingok
+    notifempty
+    postrotate
+      /usr/bin/fail2ban-client flushlogs >/dev/null || true
+    endscript
+}
