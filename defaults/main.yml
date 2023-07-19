@@ -1,0 +1,82 @@
+---
+# defaults file for fail2ban
+# Defaults vars file for fail2ban role
+# Repositories variables
+# -----------------------------------------------------------------------------
+fail2ban_repo_enable: false
+fail2ban_repository_update_cache: true
+fail2ban_repository_cache_valid_time: 3600
+
+# Package variables
+# -----------------------------------------------------------------------------
+fail2ban_package_state: 'present'
+fail2ban_packages:
+  - name: 'fail2ban'
+
+# Service variables
+# -----------------------------------------------------------------------------
+fail2ban_service_name: 'fail2ban'
+fail2ban_service_enabled: true
+fail2ban_service_state: 'started'
+
+# Paths
+# -----------------------------------------------------------------------------
+fail2ban_paths:
+  files:
+    action: {}
+    filter: {}
+    main_config:
+      path: '/etc/fail2ban/fail2ban.local'
+    jail_local:
+      path: '/etc/fail2ban/jail.local'
+  folders:
+    action:
+      path: '/etc/fail2ban/action.d'
+    filter:
+      path: '/etc/fail2ban/filter.d'
+    main:
+      path: '/etc/fail2ban'
+
+# Configuration
+# -----------------------------------------------------------------------------
+fail2ban_actions: {}
+fail2ban_filters: {}
+
+# Main configuration
+# -----------------------------------------------------------------------------
+fail2ban_main_config_content:
+  - option: 'loglevel'
+    value: 'INFO'
+  - option: 'logtarget'
+    value: '/var/log/fail2ban.log'
+  - option: 'syslog-target'
+    value: '/var/log/fail2ban.log'
+  - option: 'syslog-facility'
+    value: 1
+  - option: 'socket'
+    value: '/var/run/fail2ban/fail2ban.sock'
+  - option: 'pidfile'
+    value: '/var/run/fail2ban/fail2ban.pid'
+
+# Jails configuration
+# -----------------------------------------------------------------------------
+fail2ban_jails:
+  DEFAULT:
+    backend: 'systemd'
+    ignoreip: '127.0.0.1/8 ::1 10.0.0.0/8'
+    banaction: 'firewallcmd-rich-rules[actiontype=<multiport>]'
+    banaction_allports: 'firewallcmd-rich-rules[actiontype=<allports>]'
+    bantime.increment: 'true'
+    bantime.rndtime: '30m'
+    bantime.maxtime: '60d'
+    bantime.factor: '2'
+    bantime.formula: 'ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)'
+    bantime.overalljails: 'true'
+
+  ssh:
+    enabled: true
+    port: 'ssh'
+    filter: 'sshd'
+    logpath: '/var/log/secure'
+    maxretry: 3
+    findtime: 600
