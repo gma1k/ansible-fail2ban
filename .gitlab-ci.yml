@@ -1,0 +1,12 @@
+before_script:
+  - ansible-lint --version
+
+stages:
+  - ansible-lint
+
+ansible-lint:
+  stage: ansible-lint
+  tags:
+    - linux
+  script:
+    - ansible-lint
