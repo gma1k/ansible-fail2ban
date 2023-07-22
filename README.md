@@ -2,10 +2,9 @@
 
 Install fail2ban package.
 
-
 ## Requirements
 
-This role requires Ansible 2.5 or higher, and platform requirements are listed in the metadata file.
+This role requires Ansible 2.5 or higher.
 
 * Role Variables
 * Default Role Variables
@@ -17,10 +16,12 @@ fail2ban_packages :
 ```
 
 # Service variables
+
 ```
 fail2ban_service_name: 'fail2ban'
 ```
 # Main configuration
+
 ```
 fail2ban_main_config_content:
   - option: 'loglevel'
@@ -38,6 +39,7 @@ fail2ban_main_config_content:
 ```
 
 # Jails configuration
+
 ```
 fail2ban_jails:
   DEFAULT:
@@ -54,12 +56,9 @@ fail2ban_jails:
     findtime: 600
 ```
 ## Example playbook 
+
 ```
 - hosts: servers
   roles:
-    - { role: fail2ban }
+    - { role: ansible-fail2ban }
 ```
-
-
-
-![image](https://github.com/gma1k/ansible-fail2ban/assets/138721734/1b68b58c-8880-4bbe-b628-051ccf7f71ee)
